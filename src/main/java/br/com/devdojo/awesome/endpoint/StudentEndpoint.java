@@ -1,33 +1,51 @@
 package br.com.devdojo.awesome.endpoint;
 
 
+import br.com.devdojo.awesome.error.CustomErrorType;
 import br.com.devdojo.awesome.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import util.DateUtil;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static java.util.Arrays.asList;
+import static br.com.devdojo.awesome.model.Student.studentList;
 
 @RestController
-@RequestMapping("student")
+@RequestMapping("students")
 
 public class StudentEndpoint {
 
+    /**
+     * @author Ana Caroliny exemplo de spring boot
+     */
     @Autowired
+
     private DateUtil dateUtil;
 
-    @RequestMapping(method = RequestMethod.GET, path = "/list")
+    @RequestMapping(method = RequestMethod.GET)
 
-    public List<Student> listAll() {
-        System.out.println(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
-        String name;
-        return asList(new Student( name = "Deku"), new Student( name ="Todoroki"));
+    public  ResponseEntity<?> listAll(){
+       // System.out.println(dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
+        return new ResponseEntity<>(Student.studentList,HttpStatus.OK);
 
     }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/{id}")
+    public ResponseEntity<?> getStudentById(@PathVariable("id") int id){
+        Student student = new Student();
+        student.setId(id);
+        int index = studentList.indexOf(student);
+        if (index == -1)
+            return new ResponseEntity<>(new CustomErrorType("Student not found") , HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(Student.studentList.get(index) , HttpStatus.OK);
+
+        }
+        @RequestMapping(method = RequestMethod.POST)
+        public ResponseEntity<?> save(@RequestBody Student student){
+            Student.studentList.add(student);
+            return  new ResponseEntity<>(student,HttpStatus.OK);
+
+        }
 
 }

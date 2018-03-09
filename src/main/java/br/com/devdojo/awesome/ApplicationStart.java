@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 // classe responsável por startar o projeto
 
-   @SpringBootApplication // mesma coisa que @Configuration @EnableAutoConfiguration @ComponenteScaner
+   @SpringBootApplication //  @Configuration @EnableAutoConfiguration @ComponenteScaner
     public class ApplicationStart {
 
         public static void main(String[] args) {
